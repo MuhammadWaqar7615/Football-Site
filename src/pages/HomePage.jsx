@@ -20,21 +20,27 @@ export function HomePage() {
   const selectedLeague = searchParams.get('league') || 'all';
   const selectedStatus = searchParams.get('status') || FILTER_PILLS.ALL;
   const selectedSort = searchParams.get('sort') || SORT_OPTIONS.STATUS_LIVE_FIRST;
+  const pageParam = parseInt(searchParams.get('page') || '1', 10);
+  const currentPage = isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
 
   // Sync state changes to URL parameters
-  const updateUrlParams = (newParams) => {
+  const updateUrlParams = (newParams, resetPage = true) => {
     const updated = new URLSearchParams(searchParams);
+    if (resetPage && !('page' in newParams)) {
+      updated.delete('page');
+    }
     Object.entries(newParams).forEach(([key, val]) => {
       if (
         val === null ||
         val === undefined ||
         val === 'all' ||
         val === 'ALL' ||
-        val === SORT_OPTIONS.STATUS_LIVE_FIRST
+        val === SORT_OPTIONS.STATUS_LIVE_FIRST ||
+        (key === 'page' && val === 1)
       ) {
         updated.delete(key);
       } else {
-        updated.set(key, val);
+        updated.set(key, String(val));
       }
     });
     setSearchParams(updated, { replace: true });
@@ -44,6 +50,7 @@ export function HomePage() {
   const setSelectedLeague = (league) => updateUrlParams({ league });
   const setSelectedStatus = (status) => updateUrlParams({ status });
   const setSelectedSort = (sort) => updateUrlParams({ sort });
+  const handlePageChange = (page) => updateUrlParams({ page }, false);
 
   const { groupedMatches, totalCount: filteredCount } = useMatches({
     tab: activeTab,
@@ -84,11 +91,11 @@ export function HomePage() {
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-sport-text leading-[1.1]">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-sport-text leading-[1.15]">
             Live Football Scores, Fixtures & Match Analytics
           </h1>
 
-          <p className="text-base sm:text-lg text-sport-muted max-w-2xl leading-relaxed">
+          <p className="text-sm sm:text-base md:text-lg text-sport-muted max-w-2xl leading-relaxed">
             Real-time score updates, defensive data normalization, and canonical league coverage across over 40 worldwide competitions.
           </p>
 
@@ -194,7 +201,7 @@ export function HomePage() {
                 setActiveTab('all');
                 setSelectedStatus(FILTER_PILLS.ALL);
               }}
-              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              className={`px-3.5 sm:px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTab === 'all'
                   ? 'bg-accent-green text-slate-950 shadow-glow-green'
                   : 'text-sport-muted hover:text-sport-text'
@@ -209,7 +216,7 @@ export function HomePage() {
                 setActiveTab('live');
                 setSelectedStatus(FILTER_PILLS.LIVE);
               }}
-              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
+              className={`px-3.5 sm:px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTab === 'live'
                   ? 'bg-red-500 text-white shadow-lg'
                   : 'text-sport-muted hover:text-red-400'
@@ -225,7 +232,7 @@ export function HomePage() {
                 setActiveTab('today');
                 setSelectedStatus(FILTER_PILLS.ALL);
               }}
-              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
+              className={`px-3.5 sm:px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTab === 'today'
                   ? 'bg-accent-cyan text-slate-950 shadow-glow-cyan'
                   : 'text-sport-muted hover:text-accent-cyan'
@@ -271,6 +278,8 @@ export function HomePage() {
           error={error}
           onResetFilters={handleResetFilters}
           onLeagueClick={(slug) => navigate(`/league/${slug}`)}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
         />
       </section>
     </div>

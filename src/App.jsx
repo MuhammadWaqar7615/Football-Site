@@ -9,6 +9,7 @@ import { LeaguePage } from './pages/LeaguePage.jsx';
 import { SearchPage } from './pages/SearchPage.jsx';
 import { NotFoundPage } from './pages/NotFoundPage.jsx';
 import { useMatchData } from './context/MatchDataContext.jsx';
+import { ErrorBoundary } from './components/ui/ErrorBoundary.jsx';
 
 function AppLayout() {
   const navigate = useNavigate();
@@ -85,7 +86,9 @@ function AppLayout() {
 export function App() {
   return (
     <BrowserRouter>
-      <AppLayout />
+      <ErrorBoundary>
+        <AppLayout />
+      </ErrorBoundary>
     </BrowserRouter>
   );
 }

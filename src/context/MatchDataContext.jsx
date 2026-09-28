@@ -28,7 +28,7 @@ export function MatchDataProvider({ children }) {
     try {
       const data = await fetchMatches({
         referenceTime: options.referenceTime || referenceTime,
-        simulateDelay: options.simulateDelay ?? false,
+        simulateDelay: options.simulateDelay ?? true,
         forceRefresh: options.forceRefresh ?? false,
       });
 

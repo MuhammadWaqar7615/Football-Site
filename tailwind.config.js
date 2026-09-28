@@ -7,25 +7,28 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      screens: {
+        'xs': '480px',
+      },
       colors: {
         pitch: {
-          bg: '#0d1117',
-          surface: '#161b22',
-          card: '#21262d',
-          border: 'rgba(240, 246, 252, 0.1)',
-          hover: '#30363d',
+          bg: 'var(--color-bg)',
+          surface: 'var(--color-surface)',
+          card: 'var(--color-card)',
+          border: 'var(--color-border)',
+          hover: 'var(--color-hover)',
         },
         accent: {
-          green: '#10b981',
-          greenDark: '#2ea043',
-          cyan: '#38bdf8',
-          amber: '#f59e0b',
+          green: 'var(--color-accent-green)',
+          greenDark: '#059669',
+          cyan: 'var(--color-accent-cyan)',
+          amber: 'var(--color-accent-amber)',
           red: '#ef4444',
         },
         sport: {
-          text: '#f0f6fc',
-          muted: '#8b949e',
-          subtle: '#6e7681',
+          text: 'var(--color-text)',
+          muted: 'var(--color-text-muted)',
+          subtle: 'var(--color-text-subtle)',
         },
       },
       fontFamily: {
@@ -51,12 +54,13 @@ export default {
         },
       },
       animation: {
-        shimmer: 'shimmer 2s infinite',
+        shimmer: 'shimmer 1.8s infinite',
         'pulse-subtle': 'pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
       boxShadow: {
         'glow-green': '0 0 20px -3px rgba(16, 185, 129, 0.25)',
         'glow-cyan': '0 0 20px -3px rgba(56, 189, 248, 0.25)',
+        'card-light': '0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04)',
       },
     },
   },

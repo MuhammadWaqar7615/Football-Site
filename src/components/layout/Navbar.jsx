@@ -22,7 +22,7 @@ export function Navbar({ onOpenSearch, onNavigateHome, onSelectLeague, activeLea
               <Trophy className="w-5 h-5 transition-transform group-hover:scale-110" />
             </div>
             <div>
-              <span className="font-extrabold text-lg tracking-tight bg-gradient-to-r from-white via-slate-100 to-accent-cyan bg-clip-text text-transparent">
+              <span className="font-extrabold text-lg tracking-tight bg-gradient-to-r dark:from-white dark:via-slate-100 dark:to-accent-cyan from-slate-950 via-slate-800 to-emerald-600 bg-clip-text text-transparent">
                 MATCHPULSE
               </span>
               <span className="hidden sm:block text-[10px] uppercase font-bold tracking-widest text-accent-green">

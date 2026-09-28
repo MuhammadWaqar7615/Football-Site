@@ -3,12 +3,15 @@ import { MATCH_STATUS } from '../../utils/constants.js';
 import { LiveIndicator } from './LiveIndicator.jsx';
 import { Clock } from 'lucide-react';
 
-export function ScoreBadge({ status, score, minute, timeDisplay }) {
+/**
+ * Compact, responsive Match Status / Kickoff pill for headers and lists.
+ */
+export function ScoreBadge({ status, score, minute, timeDisplay, showScore = false, className = '' }) {
   if (status === MATCH_STATUS.LIVE) {
     return (
-      <div className="flex items-center space-x-2">
-        {score && (
-          <span className="font-extrabold text-sm sm:text-base font-mono text-sport-text px-2 py-0.5 rounded bg-pitch-surface border border-pitch-border">
+      <div className={`flex items-center space-x-1.5 shrink-0 ${className}`}>
+        {showScore && score && (
+          <span className="font-extrabold text-xs sm:text-sm font-mono text-sport-text px-2 py-0.5 rounded bg-pitch-surface border border-pitch-border">
             {score.home} - {score.away}
           </span>
         )}
@@ -19,13 +22,13 @@ export function ScoreBadge({ status, score, minute, timeDisplay }) {
 
   if (status === MATCH_STATUS.FINISHED) {
     return (
-      <div className="flex items-center space-x-2">
-        {score && (
-          <span className="font-extrabold text-sm sm:text-base font-mono text-sport-text px-2 py-0.5 rounded bg-pitch-surface border border-pitch-border">
+      <div className={`flex items-center space-x-1.5 shrink-0 ${className}`}>
+        {showScore && score && (
+          <span className="font-extrabold text-xs sm:text-sm font-mono text-sport-text px-2 py-0.5 rounded bg-pitch-surface border border-pitch-border">
             {score.home} - {score.away}
           </span>
         )}
-        <span className="px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700/60 text-sport-muted text-xs font-bold tracking-wider uppercase">
+        <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-pitch-surface border border-pitch-border text-sport-muted text-[10px] sm:text-xs font-bold tracking-wider uppercase select-none">
           FT
         </span>
       </div>
@@ -34,9 +37,9 @@ export function ScoreBadge({ status, score, minute, timeDisplay }) {
 
   // Upcoming Match
   return (
-    <div className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-accent-cyan/10 border border-accent-cyan/20 text-accent-cyan text-xs font-semibold">
-      <Clock className="w-3.5 h-3.5 shrink-0" />
-      <span>{timeDisplay || 'Upcoming'}</span>
+    <div className={`inline-flex items-center space-x-1 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-accent-cyan/10 border border-accent-cyan/25 text-accent-cyan text-[11px] sm:text-xs font-semibold shrink-0 select-none ${className}`}>
+      <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+      <span className="truncate max-w-[80px] sm:max-w-none">{timeDisplay || 'Upcoming'}</span>
     </div>
   );
 }

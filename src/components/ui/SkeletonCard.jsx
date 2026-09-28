@@ -1,46 +1,51 @@
 import React from 'react';
 
 /**
- * Loading skeleton matching the exact dimensions and layout of MatchCard with shimmer pulse effect.
+ * Professional, pixel-perfect loading skeleton mirroring MatchCard.
+ * Uses hardware-accelerated shimmer sweeping with zero layout shift
+ * in both sporty dark and crisp light modes.
  */
 export function SkeletonCard() {
   return (
-    <div className="relative overflow-hidden glass-card rounded-2xl p-4 sm:p-5 border border-pitch-border flex flex-col justify-between h-[156px]">
-      {/* Top Meta Row */}
-      <div className="flex items-center justify-between">
-        <div className="h-4 w-28 bg-pitch-hover/60 rounded-md animate-pulse"></div>
-        <div className="h-4 w-16 bg-pitch-hover/40 rounded-full animate-pulse"></div>
+    <div
+      aria-hidden="true"
+      className="glass-card skeleton-container rounded-2xl p-4 sm:p-5 border border-pitch-border flex flex-col justify-between min-h-[160px] h-full select-none"
+    >
+      {/* Top Meta Row: League dot & name + Status pill */}
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center space-x-2 min-w-0">
+          <div className="w-2 h-2 rounded-full skeleton-bone shrink-0" />
+          <div className="h-3.5 w-24 sm:w-32 skeleton-bone" />
+        </div>
+        <div className="h-5 w-16 rounded-full skeleton-bone shrink-0" />
       </div>
 
-      {/* Teams and Score Section */}
+      {/* Teams and Scores Section */}
       <div className="space-y-2.5 my-2">
-        {/* Home Team */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-6 h-6 rounded-full bg-pitch-hover/80 animate-pulse shrink-0"></div>
-            <div className="h-4 w-36 sm:w-44 bg-pitch-hover/60 rounded animate-pulse"></div>
+        {/* Home Team Row */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center space-x-2.5 min-w-0 flex-1">
+            <div className="w-6 h-6 rounded-full skeleton-bone shrink-0" />
+            <div className="h-4 w-28 sm:w-40 skeleton-bone rounded-md" />
           </div>
-          <div className="h-4 w-6 bg-pitch-hover/50 rounded animate-pulse"></div>
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg skeleton-bone shrink-0" />
         </div>
 
-        {/* Away Team */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-6 h-6 rounded-full bg-pitch-hover/80 animate-pulse shrink-0"></div>
-            <div className="h-4 w-32 sm:w-40 bg-pitch-hover/60 rounded animate-pulse"></div>
+        {/* Away Team Row */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center space-x-2.5 min-w-0 flex-1">
+            <div className="w-6 h-6 rounded-full skeleton-bone shrink-0" />
+            <div className="h-4 w-32 sm:w-36 skeleton-bone rounded-md" />
           </div>
-          <div className="h-4 w-6 bg-pitch-hover/50 rounded animate-pulse"></div>
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg skeleton-bone shrink-0" />
         </div>
       </div>
 
-      {/* Bottom Footer Info */}
-      <div className="pt-2 border-t border-pitch-border/50 flex items-center justify-between">
-        <div className="h-3 w-20 bg-pitch-hover/40 rounded animate-pulse"></div>
-        <div className="h-4 w-14 bg-pitch-hover/50 rounded-full animate-pulse"></div>
+      {/* Card Footer: Date & Status Pill */}
+      <div className="pt-2 border-t border-pitch-border/50 flex items-center justify-between gap-2">
+        <div className="h-3 w-20 sm:w-28 skeleton-bone rounded" />
+        <div className="h-3 w-12 skeleton-bone rounded" />
       </div>
-
-      {/* Shimmer sweep overlay */}
-      <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer pointer-events-none"></div>
     </div>
   );
 }
