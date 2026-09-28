@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Layers } from 'lucide-react';
 
 /**
- * Professional, highly-responsive and accessible Pagination component.
+//  * Professional, highly-responsive and accessible Pagination component.
  */
 export function Pagination({
   currentPage = 1,
