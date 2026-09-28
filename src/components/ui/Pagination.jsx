@@ -5,7 +5,6 @@ import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Layers } from '
 /**
  * Professional, highly-responsive and accessible Pagination component.
  * Adapts seamlessly across mobile (compact picker & touch targets),
- * tablet (streamlined window), and desktop (full smart ellipsis & quick-jump).
  */
 export function Pagination({
   currentPage = 1,
@@ -133,11 +132,10 @@ export function Pagination({
                 onClick={() => onPageChange(p)}
                 aria-current={isActive ? 'page' : undefined}
                 aria-label={`Page ${p}`}
-                className={`w-9 h-9 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center select-none ${
-                  isActive
+                className={`w-9 h-9 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center select-none ${isActive
                     ? 'bg-accent-green text-slate-950 shadow-glow-green font-extrabold'
                     : 'text-sport-muted hover:text-sport-text hover:bg-pitch-surface border border-transparent hover:border-pitch-border'
-                }`}
+                  }`}
               >
                 {p}
               </motion.button>
