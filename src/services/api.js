@@ -13,7 +13,7 @@ let inMemoryCache = null;
  * @returns {Promise<Object>} Sanitized matches dataset & aggregated stats
  */
 export async function fetchMatches({
-  simulateDelay = false,
+  simulateDelay = true,
   referenceTime = DEFAULT_REFERENCE_TIMESTAMP,
   forceRefresh = false,
 } = {}) {
