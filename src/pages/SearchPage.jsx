@@ -6,6 +6,7 @@ import { useMatches } from '../hooks/useMatches.js';
 import { useDebounce } from '../hooks/useDebounce.js';
 import { HighlightText } from '../components/search/HighlightText.jsx';
 import { MatchCard } from '../components/match/MatchCard.jsx';
+import { Pagination } from '../components/ui/Pagination.jsx';
 import { Button } from '../components/ui/Button.jsx';
 
 export function SearchPage() {
@@ -33,10 +34,27 @@ export function SearchPage() {
     searchQuery: debouncedQuery,
   });
 
-  // Reset selected index on query change
+  const PAGE_SIZE = 20;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Reset selected index and page on query change
   useEffect(() => {
     setSelectedIndex(-1);
+    setCurrentPage(1);
   }, [debouncedQuery]);
+
+  const totalResults = searchResults.length;
+  const totalPages = Math.max(1, Math.ceil(totalResults / PAGE_SIZE));
+
+  const paginatedResults = React.useMemo(() => {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    return searchResults.slice(start, start + PAGE_SIZE);
+  }, [searchResults, currentPage]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Full keyboard accessibility: ArrowUp, ArrowDown, Escape, Enter
   useEffect(() => {
@@ -139,22 +157,33 @@ export function SearchPage() {
 
       {/* Search Results Grid */}
       {searchResults.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {searchResults.map((match, index) => {
-            const isSelected = selectedIndex === index;
-            return (
-              <div
-                key={match.id}
-                className={isSelected ? 'ring-2 ring-accent-green rounded-2xl' : ''}
-              >
-                <MatchCard
-                  match={match}
-                  searchQuery={debouncedQuery}
-                  onLeagueClick={(slug) => navigate(`/league/${slug}`)}
-                />
-              </div>
-            );
-          })}
+        <div className="space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {paginatedResults.map((match, index) => {
+              const isSelected = selectedIndex === index;
+              return (
+                <div
+                  key={match.id}
+                  className={isSelected ? 'ring-2 ring-accent-green rounded-2xl' : ''}
+                >
+                  <MatchCard
+                    match={match}
+                    searchQuery={debouncedQuery}
+                    onLeagueClick={(slug) => navigate(`/league/${slug}`)}
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+          {/* 20 Cards Per Page Professional Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalResults}
+            pageSize={PAGE_SIZE}
+            onPageChange={handlePageChange}
+          />
         </div>
       ) : debouncedQuery ? (
         <div className="glass-card rounded-2xl p-12 text-center border border-pitch-border space-y-4 max-w-md mx-auto">
