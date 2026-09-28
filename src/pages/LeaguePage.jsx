@@ -20,15 +20,26 @@ export function LeaguePage() {
   // Read URL search parameters with fallbacks
   const statusParam = searchParams.get('status') || FILTER_PILLS.ALL;
   const sortParam = searchParams.get('sort') || SORT_OPTIONS.TIME_ASC;
+  const pageParam = parseInt(searchParams.get('page') || '1', 10);
+  const currentPage = isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
 
   // Sync state to URL parameters
-  const updateUrlParams = (newParams) => {
+  const updateUrlParams = (newParams, resetPage = true) => {
     const updated = new URLSearchParams(searchParams);
+    if (resetPage && !('page' in newParams)) {
+      updated.delete('page');
+    }
     Object.entries(newParams).forEach(([key, val]) => {
-      if (val === null || val === undefined || val === 'ALL' || val === SORT_OPTIONS.TIME_ASC) {
+      if (
+        val === null ||
+        val === undefined ||
+        val === 'ALL' ||
+        val === SORT_OPTIONS.TIME_ASC ||
+        (key === 'page' && val === 1)
+      ) {
         updated.delete(key);
       } else {
-        updated.set(key, val);
+        updated.set(key, String(val));
       }
     });
     setSearchParams(updated, { replace: true });
@@ -36,6 +47,7 @@ export function LeaguePage() {
 
   const setStatus = (newStatus) => updateUrlParams({ status: newStatus });
   const setSort = (newSort) => updateUrlParams({ sort: newSort });
+  const handlePageChange = (page) => updateUrlParams({ page }, false);
 
   const { groupedMatches, totalCount } = useMatches({
     leagueSlug,
@@ -130,7 +142,7 @@ export function LeaguePage() {
           <button
             type="button"
             onClick={() => setStatus(FILTER_PILLS.ALL)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
               statusParam === FILTER_PILLS.ALL
                 ? 'bg-accent-green text-slate-950 font-bold shadow-glow-green'
                 : 'bg-pitch-surface text-sport-muted hover:text-sport-text border border-pitch-border'
@@ -142,7 +154,7 @@ export function LeaguePage() {
           <button
             type="button"
             onClick={() => setStatus(FILTER_PILLS.LIVE)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center space-x-1.5 cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center space-x-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
               statusParam === FILTER_PILLS.LIVE
                 ? 'bg-red-500 text-white font-bold'
                 : 'bg-pitch-surface text-sport-muted hover:text-red-400 border border-pitch-border'
@@ -155,7 +167,7 @@ export function LeaguePage() {
           <button
             type="button"
             onClick={() => setStatus(FILTER_PILLS.UPCOMING)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center space-x-1.5 cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center space-x-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
               statusParam === FILTER_PILLS.UPCOMING
                 ? 'bg-accent-cyan text-slate-950 font-bold shadow-glow-cyan'
                 : 'bg-pitch-surface text-sport-muted hover:text-accent-cyan border border-pitch-border'
@@ -168,7 +180,7 @@ export function LeaguePage() {
           <button
             type="button"
             onClick={() => setStatus(FILTER_PILLS.FINISHED)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center space-x-1.5 cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center space-x-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
               statusParam === FILTER_PILLS.FINISHED
                 ? 'bg-slate-700 text-white font-bold'
                 : 'bg-pitch-surface text-sport-muted hover:text-sport-text border border-pitch-border'
@@ -200,6 +212,8 @@ export function LeaguePage() {
         loading={loading}
         error={error}
         onResetFilters={() => updateUrlParams({ status: 'ALL', sort: SORT_OPTIONS.TIME_ASC })}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
       />
     </div>
   );
