@@ -14,6 +14,9 @@ export function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { totalCount, liveCount, loading, error, openSearch } = useMatchData();
   const { topLeagues } = useNormalizedLeagues();
+  const isBootstrapping = loading && totalCount === 0;
+  const liveBadgeText = isBootstrapping ? 'Loading…' : `${liveCount} Live Matches In Play`;
+  const totalFixtureText = isBootstrapping ? 'Loading fixtures…' : `${totalCount} Fixtures`;
 
   // Read URL search parameters with defaults
   const activeTab = searchParams.get('tab') || 'all'; // 'live', 'today', 'all'
@@ -84,10 +87,10 @@ export function HomePage() {
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
             </span>
             <span className="text-xs font-extrabold tracking-wide uppercase text-sport-text">
-              {liveCount > 0 ? `${liveCount} Live Matches In Play` : 'Live Coverage Active'}
+              {isBootstrapping ? 'Loading live data…' : liveBadgeText}
             </span>
             <span className="text-sport-subtle">•</span>
-            <span className="text-xs text-accent-cyan font-semibold">{totalCount} Fixtures</span>
+            <span className="text-xs text-accent-cyan font-semibold">{totalFixtureText}</span>
           </div>
 
           {/* Main Headline */}
@@ -110,7 +113,7 @@ export function HomePage() {
               className="inline-flex items-center space-x-2 px-5 py-3 rounded-xl bg-accent-green text-slate-950 font-bold text-sm shadow-glow-green hover:bg-emerald-400 transition-all cursor-pointer"
             >
               <Radio className="w-4 h-4" />
-              <span>Explore Live ({liveCount})</span>
+              <span>Explore Live ({isBootstrapping ? '…' : liveCount})</span>
             </button>
 
             <button
@@ -207,7 +210,7 @@ export function HomePage() {
                   : 'text-sport-muted hover:text-sport-text'
               }`}
             >
-              All Fixtures ({totalCount})
+              All Fixtures ({isBootstrapping ? '…' : totalCount})
             </button>
 
             <button
@@ -223,7 +226,7 @@ export function HomePage() {
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-              <span>Live Now ({liveCount})</span>
+              <span>Live Now ({isBootstrapping ? '…' : liveCount})</span>
             </button>
 
             <button
