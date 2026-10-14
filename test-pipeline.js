@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { sanitizeMatch, extractTopLeagues, normalizeLeague, inferMatchStatus } from './src/utils/normalizer.js';
+import { fetchMatches } from './src/services/api.js';
 import { DEFAULT_REFERENCE_TIMESTAMP, MATCH_STATUS } from './src/utils/constants.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -114,6 +115,20 @@ if (lastMatch.timestamp === null) {
   console.log('[PASS] Chronological sort places missing timestamp / TBD fixtures at the bottom');
 } else {
   console.error('[FAIL] Last match should be null timestamp:', lastMatch);
+  process.exit(1);
+}
+
+// 5. Test runtime-safe URL resolution used by fetchMatches
+try {
+  const liveData = await fetchMatches({ simulateDelay: false, forceRefresh: true });
+  if (Array.isArray(liveData.matches) && liveData.matches.length > 0) {
+    console.log(`[PASS] fetchMatches resolves a valid dataset in runtime: ${liveData.matches.length} fixtures loaded`);
+  } else {
+    console.error('[FAIL] fetchMatches returned empty runtime dataset');
+    process.exit(1);
+  }
+} catch (error) {
+  console.error('[FAIL] fetchMatches runtime resolution failed:', error);
   process.exit(1);
 }
 
