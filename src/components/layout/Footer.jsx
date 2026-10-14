@@ -2,7 +2,8 @@ import { Trophy, Activity } from 'lucide-react';
 import { useMatchData } from '../../context/MatchDataContext.jsx';
 
 export function Footer() {
-  const { totalCount, referenceTime } = useMatchData();
+  const { totalCount, referenceTime, loading } = useMatchData();
+  const isBootstrapping = loading && totalCount === 0;
 
   return (
     <footer className="glass-panel border-t border-pitch-border mt-auto pt-10 pb-8 transition-colors">
@@ -36,7 +37,7 @@ export function Footer() {
 
             <div className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-pitch-surface border border-pitch-border text-sport-muted text-xs font-mono">
               <Activity className="w-3.5 h-3.5 text-accent-cyan" />
-              <span>{totalCount} Fixtures Ingested</span>
+              <span>{isBootstrapping ? 'Loading fixtures…' : `${totalCount} Fixtures Ingested`}</span>
             </div>
           </div>
         </div>
