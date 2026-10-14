@@ -6,7 +6,8 @@ import { Layers } from 'lucide-react';
 
 export function QuickFilterBar({ selectedLeagueSlug = 'all', onSelectLeague }) {
   const { topLeagues, allLeagues } = useNormalizedLeagues();
-  const { totalCount } = useMatchData();
+  const { totalCount, loading } = useMatchData();
+  const isBootstrapping = loading && totalCount === 0;
 
   // Combine All option + top leagues + other popular leagues
   const displayLeagues = [
@@ -42,7 +43,7 @@ export function QuickFilterBar({ selectedLeagueSlug = 'all', onSelectLeague }) {
               )}
               {league.id === 'all' && <Layers className="w-3.5 h-3.5 shrink-0" />}
               <span>{league.name}</span>
-              {league.count !== undefined && (
+              {!isBootstrapping && league.count !== undefined && (
                 <span
                   className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
                     isSelected
